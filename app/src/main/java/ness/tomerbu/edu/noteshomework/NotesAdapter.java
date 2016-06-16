@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -21,26 +22,28 @@ public class NotesAdapter  extends RecyclerView.Adapter<NotesAdapter.NotesViewHo
         this.notes = notes;
         this.inflater = inflater;
     }
-
     @Override
     public NotesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View itemView = inflater.inflate(R.layout.note_layout, parent, false);
+        return new NotesViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(NotesViewHolder holder, int position) {
-
+        Note n = notes.get(position);
+        holder.etNote.setText(n.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return notes.size();
     }
 
     public class NotesViewHolder extends RecyclerView.ViewHolder{
-
+        EditText etNote;
         public NotesViewHolder(View itemView) {
             super(itemView);
+            etNote = (EditText) itemView.findViewById(R.id.etNote);
         }
     }
 }
