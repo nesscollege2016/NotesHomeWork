@@ -9,14 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -110,43 +107,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
-        final SharedPreferences prefs = getSharedPreferences("Notes", MODE_PRIVATE);
-        int noteCount = prefs.getInt("NoteCount", 0);
-        final String noteName = "note" + noteCount;
-        final SharedPreferences.Editor edit = prefs.edit();
+       AlertDialog.Builder builder = new AlertDialog.Builder(this);
+       View v = getLayoutInflater().inflate(R.layout.note_layout, (ViewGroup) findViewById(R.id.layout), false);
+       final EditText etNote = (EditText) v.findViewById(R.id.etNote);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View v = getLayoutInflater().inflate(R.layout.note_layout, (ViewGroup) findViewById(R.id.layout), false);
-        final EditText etNote = (EditText) v.findViewById(R.id.etNote);
-
-        etNote.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                edit.putString(noteName, etNote.getText().toString());
-                edit.apply();
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        builder.setView(v);
+       builder.setView(v);
 
 
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                Toast.makeText(MainActivity.this, etNote.getText().toString(), Toast.LENGTH_SHORT).show();
-                adapter.addNote(new Note("title",etNote.getText().toString()));
-            }
-        });
-        builder.show();
-        edit.putInt("NoteCount", noteCount+1);
-        edit.commit();
+       builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+           @Override
+           public void onDismiss(DialogInterface dialogInterface) {
+               Note n = new Note("Title", etNote.getText().toString());
+               addNoteToDisk(n);
+               adapter.addNote(n);
+           }
+       });
+
+       builder.show();
     }
 }
