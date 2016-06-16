@@ -44,6 +44,13 @@ public class NotesAdapter  extends RecyclerView.Adapter<NotesAdapter.NotesViewHo
         public NotesViewHolder(View itemView) {
             super(itemView);
             etNote = (EditText) itemView.findViewById(R.id.etNote);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    Note note = notes.get(pos);
+                }
+            });
         }
     }
 

@@ -19,7 +19,7 @@
         android:gravity="top|left"
         android:padding="10dp"
         android:layout_margin="5dp"
-        android:text="dffdfdfd"
+        android:text=""
         android:id="@+id/etNote"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
