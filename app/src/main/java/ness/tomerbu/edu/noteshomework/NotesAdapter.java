@@ -46,4 +46,9 @@ public class NotesAdapter  extends RecyclerView.Adapter<NotesAdapter.NotesViewHo
             etNote = (EditText) itemView.findViewById(R.id.etNote);
         }
     }
+
+    public void addNote(Note note){
+        notes.add(note);
+        notifyItemInserted(notes.size() - 1);
+    }
 }

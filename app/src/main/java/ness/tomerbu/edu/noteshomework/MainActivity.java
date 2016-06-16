@@ -1,5 +1,6 @@
 package ness.tomerbu.edu.noteshomework;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -22,12 +23,36 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fetchNotes();
+        getNotesFromDisk();
+        //fetchNotes();
         NotesAdapter adapter = new NotesAdapter(this, notes, getLayoutInflater());
         rvNotes = (RecyclerView) findViewById(R.id.rvNotes);
         rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rvNotes.setAdapter(adapter);
 
+
+    }
+
+    private void getNotesFromDisk(){
+        SharedPreferences prefs = getSharedPreferences("Notes", MODE_PRIVATE);
+        int noteCount = prefs.getInt("NoteCount", 0);
+        for (int i = 0; i < noteCount; i++) {
+            String content = prefs.getString("note" + i, "");
+            Note note = new Note("Title", content);
+            notes.add(note);
+        }
+    }
+
+    private void addNoteToDisk(Note note){
+        SharedPreferences prefs = getSharedPreferences("Notes", MODE_PRIVATE);
+
+        int noteCount = prefs.getInt("NoteCount", 0);
+
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("note" + noteCount, note.getContent());
+        edit.putInt("NoteCount", noteCount + 1);
+
+        edit.commit();
 
     }
 
@@ -40,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             int rand = r.nextInt(lorem.length());
             String cut = lorem.substring(0, rand);
             Note note = new Note("Title", cut);
+            addNoteToDisk(note);
             notes.add(note);
         }
     }
